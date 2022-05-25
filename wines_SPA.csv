@@ -1,4 +1,3 @@
-"winery","wine","year","rating","num_reviews","country","region","price","type","body","acidity"
 "Teso La Monja","Tinto","2013",4.9,58,"Espana","Toro",995,"Toro Red",5,3
 "Artadi","Vina El Pison","2018",4.9,31,"Espana","Vino de Espana",313.5,"Tempranillo",4,2
 "Vega Sicilia","Unico","2009",4.8,1793,"Espana","Ribera del Duero",324.95,"Ribera Del Duero Red",5,3
