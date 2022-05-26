@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 @Configuration
 public class CSVImporter {
-    boolean loadDatabase = true;
+    boolean loadDatabase = false;
     private static final Logger log = LoggerFactory.getLogger(CSVImporter.class);
     List<String> lines = new ArrayList<>();
     List<Wine> wineList = new ArrayList<>();
