@@ -18,18 +18,16 @@ public class WineryController {
     @Autowired
     private WineryRepository wineryRepository;
 
-
     @GetMapping("/{id}")
-    Winery one(@PathVariable Integer id) throws Exception {
+    Winery one(@PathVariable Integer id) throws WineryNotFoundException {
         return wineryRepository.findById(id).orElseThrow(() -> new WineryNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")
-    EntityModel<Winery> hal_one(@PathVariable Integer id) throws Exception {
-        Winery winery = wineryRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+    EntityModel<Winery> hal_one(@PathVariable Integer id) throws WineryNotFoundException {
+        Winery winery = wineryRepository.findById(id).orElseThrow(() -> new WineryNotFoundException(id));
         return EntityModel.of(winery,
                 linkTo(methodOn(WineryController.class).hal_one(id)).withSelfRel()
         );
-
     }
 }
