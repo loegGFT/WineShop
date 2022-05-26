@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -16,9 +18,10 @@ public class WineryController {
     @Autowired
     private WineryRepository wineryRepository;
 
+
     @GetMapping("/{id}")
     Winery one(@PathVariable Integer id) throws Exception {
-        return wineryRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        return wineryRepository.findById(id).orElseThrow(() -> new WineryNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")

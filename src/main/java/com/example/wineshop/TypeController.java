@@ -18,7 +18,7 @@ public class TypeController {
 
     @GetMapping("/{id}")
     Type one(@PathVariable Integer id) throws Exception {
-        return typeRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        return typeRepository.findById(id).orElseThrow(() -> new TypeNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")

@@ -5,6 +5,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -17,20 +19,10 @@ public class WineController {
     @Autowired
     private WineRepresentationModelAssembler assembler;
 
+
     @GetMapping("/{id}")
     Wine one(@PathVariable Integer id) throws Exception {
-        return wineRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
-    }
-
-    @GetMapping("/hal/{id}")
-    EntityModel<Wine> hal_one(@PathVariable Integer id) throws Exception {
-        Wine wine = wineRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
-
-        return
-                EntityModel.of(wine,
-                        linkTo(methodOn(WineController.class).hal_one(id)).withSelfRel(),
-                        linkTo(methodOn(WineryController.class).hal_one(wine.getWinery().getId())).withRel("winery")
-                );
+        return wineRepository.findById(id).orElseThrow(() -> new WineNotFoundException(id));
     }
 
     @GetMapping("/hal2/{id}")

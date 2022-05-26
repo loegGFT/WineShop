@@ -18,7 +18,7 @@ public class RegionController {
 
     @GetMapping("/{id}")
     Region one(@PathVariable Integer id) throws Exception {
-        return RegionRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+        return RegionRepository.findById(id).orElseThrow(() -> new RegionNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")
