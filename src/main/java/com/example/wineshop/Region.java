@@ -1,14 +1,23 @@
 package com.example.wineshop;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.springframework.hateoas.server.core.Relation;
+
+import javax.persistence.*;
 
 @Entity
+@Table(name = "region")
+@Relation(collectionRelation = "regions", itemRelation = "region")
 public class Region {
 
-    private @Id @GeneratedValue Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "country")
     private String country;
 
     public Region(String name, String country) {
@@ -42,5 +51,16 @@ public class Region {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Region region = (Region) o;
+
+        if (name != null ? !name.equals(region.name) : region.name != null) return false;
+        return country != null ? country.equals(region.country) : region.country == null;
     }
 }

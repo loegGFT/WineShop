@@ -15,7 +15,13 @@ import java.util.stream.Stream;
 
 @Configuration
 public class CSVImporter {
+    // DO NOT TOUCH
+    /**
+     * Esta variable controla si se importa a la base de datos o no de un archivo CSV
+     */
     boolean loadDatabase = false;
+    // DO NOT TOUCH
+
     private static final Logger log = LoggerFactory.getLogger(CSVImporter.class);
     List<String> lines = new ArrayList<>();
     List<Wine> wineList = new ArrayList<>();
@@ -32,11 +38,49 @@ public class CSVImporter {
     ) {
         return args -> {
             if (loadDatabase) {
+                log.info("Loading database...");
                 getInList();
+                log.info("File parsed...");
                 lineToObjects();
-                // TODO: Guardar en Base de Datos
+                log.info("Object lists constructed...");
+                saveInDB(regionRepository,
+                        typeRepository,
+                        wineRepository,
+                        wineryRepository);
+                log.info("Saved in DB...");
+            } else {
+                log.info("Database loading skipped.");
             }
+            log.info("Have fun!");
         };
+    }
+
+    private void saveInDB(
+            RegionRepository regionRepository,
+            TypeRepository typeRepository,
+            WineRepository wineRepository,
+            WineryRepository wineryRepository
+    ) {
+        for (Winery winery :
+                wineryList) {
+            wineryRepository.save(winery);
+        }
+        log.info("Wineries saved.");
+        for (Region region :
+                regionList) {
+            regionRepository.save(region);
+        }
+        log.info("Regions saved.");
+        for (Type type :
+                typeList) {
+            typeRepository.save(type);
+        }
+        log.info("Types saved.");
+        for (Wine wine :
+                wineList) {
+            wineRepository.save(wine);
+        }
+        log.info("Wines saved.");
     }
 
     private void getInList() {
@@ -68,26 +112,84 @@ public class CSVImporter {
             Winery newWinery = new Winery(array[0]);
             Region newRegion = new Region(array[6], array[5]);
             Type newType = new Type(array[8]);
+
+            newWine = compareWinery(newWinery, newWine);
+            newWine = compareRegion(newRegion, newWine);
+            newWine = compareType(newType, newWine);
             wineList.add(newWine);
-            if (!wineryList.contains(newWinery))
-                wineryList.add(newWinery);
-            if (!regionList.contains(newRegion))
-                regionList.add(newRegion);
-            if (!typeList.contains(newType))
-                typeList.add(newType);
         }
     }
 
-    private String cleanString(String s) {
-        log.warn(s);
+    private Wine compareWinery(Winery winery, Wine currentWine) {
+        int index = -1;
+        for (Winery wineryLooped :
+                wineryList) {
+            if (winery.equals(wineryLooped))
+                index = wineryList.indexOf(wineryLooped);
+            if (index != -1)
+                break;
+        }
+        if (index == -1) {
+            wineryList.add(winery);
+            currentWine.setWinery(winery);
+        } else
+            currentWine.setWinery(wineryList.get(index));
+        return currentWine;
+    }
+
+    private Wine compareRegion(Region region, Wine currentWine) {
+        int index = -1;
+        for (Region regionLooped :
+                regionList) {
+            if (region.equals(regionLooped))
+                index = regionList.indexOf(regionLooped);
+            if (index != -1)
+                break;
+        }
+        if (index == -1) {
+            regionList.add(region);
+            currentWine.setRegion(region);
+        } else
+            currentWine.setRegion(regionList.get(index));
+        return currentWine;
+    }
+
+    private Wine compareType(Type type, Wine currentWine) {
+        int index = -1;
+        for (Type typeLooped :
+                typeList) {
+            if (type.equals(typeLooped))
+                index = typeList.indexOf(typeLooped);
+            if (index != -1)
+                break;
+        }
+        if (index == -1) {
+            typeList.add(type);
+            currentWine.setType(type);
+        } else
+            currentWine.setType(typeList.get(index));
+        return currentWine;
+    }
+
+    private String cleanString(String s, boolean detailed) {
+        if (detailed)
+            log.warn(s);
         String newer = s.replace("N.V.", "0");
-        log.info("Remove NV: "+newer);
+        if (detailed)
+            log.info("Remove NV: "+newer);
         newer = newer.replace("\"\"", "0");
-        log.info("Remove double quotes: "+newer);
+        if (detailed)
+            log.info("Remove double quotes: "+newer);
         newer = newer.replace("NA", "0");
-        log.info("Remove NA: "+newer);
+        if (detailed)
+            log.info("Remove NA: "+newer);
         newer = newer.replace("\"", "");
-        log.info("Remove quotes: "+newer);
+        if (detailed)
+            log.info("Remove quotes: "+newer);
         return newer;
+    }
+
+    private String cleanString(String s) {
+        return cleanString(s, false);
     }
 }

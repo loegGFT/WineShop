@@ -1,9 +1,5 @@
 package com.example.wineshop;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.lang.NonNull;
@@ -12,14 +8,35 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(name = "wine")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Relation(collectionRelation = "wines", itemRelation = "wine")
 public class Wine {
-    private @Id @GeneratedValue Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    @NonNull
+    private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "year")
     private Integer year;
+
+    @Column(name = "rating")
     private Float rating;
+
+    @Column(name = "num_reviews")
     private Integer num_reviews;
+
+    @Column(name = "price")
     private Float price;
+
+    @Column(name = "body")
     private Integer body;
+
+    @Column(name = "acidity")
     private Integer acidity;
 
     public Wine(String name, Integer year, Float rating, Integer num_reviews, Float price, Integer body, Integer acidity) {
