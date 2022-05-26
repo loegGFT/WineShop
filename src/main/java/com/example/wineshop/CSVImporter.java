@@ -61,25 +61,13 @@ public class CSVImporter {
             WineRepository wineRepository,
             WineryRepository wineryRepository
     ) {
-        for (Winery winery :
-                wineryList) {
-            wineryRepository.save(winery);
-        }
+        wineryRepository.saveAll(wineryList);
         log.info("Wineries saved.");
-        for (Region region :
-                regionList) {
-            regionRepository.save(region);
-        }
+        regionRepository.saveAll(regionList);
         log.info("Regions saved.");
-        for (Type type :
-                typeList) {
-            typeRepository.save(type);
-        }
+        typeRepository.saveAll(typeList);
         log.info("Types saved.");
-        for (Wine wine :
-                wineList) {
-            wineRepository.save(wine);
-        }
+        wineRepository.saveAll(wineList);
         log.info("Wines saved.");
     }
 
