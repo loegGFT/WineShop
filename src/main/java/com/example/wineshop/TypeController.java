@@ -17,13 +17,13 @@ public class TypeController {
     private TypeRepository typeRepository;
 
     @GetMapping("/{id}")
-    Type one(@PathVariable Integer id) throws Exception {
+    Type one(@PathVariable Integer id) throws TypeNotFoundException {
         return typeRepository.findById(id).orElseThrow(() -> new TypeNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")
-    EntityModel<Type> hal_one(@PathVariable Integer id) throws Exception {
-        Type type = typeRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+    EntityModel<Type> hal_one(@PathVariable Integer id) throws TypeNotFoundException {
+        Type type = typeRepository.findById(id).orElseThrow(() -> new TypeNotFoundException(id));
         return EntityModel.of(type,
                 linkTo(methodOn(TypeController.class).hal_one(id)).withSelfRel()
         );

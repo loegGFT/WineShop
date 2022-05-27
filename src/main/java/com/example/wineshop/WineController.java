@@ -26,11 +26,11 @@ public class WineController {
     }
 
     @GetMapping("/hal2/{id}")
-    ResponseEntity<EntityModel<Wine>> hal2_one(@PathVariable Integer id) throws Exception {
+    ResponseEntity<EntityModel<Wine>> hal2_one(@PathVariable Integer id) throws WineNotFoundException {
         return wineRepository.findById(id)
                 .map(wine -> assembler.toModel(wine))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new WineNotFoundException(id));
     }
 
 }

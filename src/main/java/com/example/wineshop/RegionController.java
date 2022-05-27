@@ -17,13 +17,13 @@ public class RegionController {
     private RegionRepository RegionRepository;
 
     @GetMapping("/{id}")
-    Region one(@PathVariable Integer id) throws Exception {
+    Region one(@PathVariable Integer id) throws RegionNotFoundException {
         return RegionRepository.findById(id).orElseThrow(() -> new RegionNotFoundException(id));
     }
 
     @GetMapping("/hal/{id}")
-    EntityModel<Region> hal_one(@PathVariable Integer id) throws Exception {
-        Region Region = RegionRepository.findById(id).orElseThrow(() -> new Exception("Not found"));
+    EntityModel<Region> hal_one(@PathVariable Integer id) throws RegionNotFoundException {
+        Region Region = RegionRepository.findById(id).orElseThrow(() -> new RegionNotFoundException(id));
         return EntityModel.of(Region,
                 linkTo(methodOn(RegionController.class).hal_one(id)).withSelfRel()
         );
