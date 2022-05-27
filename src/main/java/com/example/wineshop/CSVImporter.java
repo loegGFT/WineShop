@@ -15,11 +15,13 @@ import java.util.stream.Stream;
 
 @Configuration
 public class CSVImporter {
+
+
     // DO NOT TOUCH
     /**
      * Esta variable controla si se importa a la base de datos o no de un archivo CSV
      */
-    boolean loadDatabase = false;
+    boolean loadDatabase = true;
     // DO NOT TOUCH
 
     private static final Logger log = LoggerFactory.getLogger(CSVImporter.class);
